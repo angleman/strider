@@ -3,12 +3,11 @@
 from  strider/strider:base
 
 # Root password
-run  echo 'root:str!der' | chpasswd
-
-# Add an admin user
-run  /usr/bin/mongod --smallfiles --fork --logpath ./mongo.log > /dev/null; sleep 2; /src/bin/strider addUser --email test@example.com --password dontlook --admin true; /usr/bin/mongod --shutdown
-# Make sure it was added
-run  /usr/bin/mongod --smallfiles --fork --logpath mongo.log > /dev/null; sleep 2; echo "db.users.find()" | mongo localhost/strider-foss | grep test@example.com
+run  echo 'root:str!der' | chpasswd \
+     # Add an admin user
+     /usr/bin/mongod --smallfiles --fork --logpath ./mongo.log > /dev/null; sleep 2; /src/bin/strider addUser --email test@example.com --password dontlook --admin true; /usr/bin/mongod --shutdown \
+     # Make sure it was added
+     /usr/bin/mongod --smallfiles --fork --logpath mongo.log > /dev/null; sleep 2; echo "db.users.find()" | mongo localhost/strider-foss | grep test@example.com
 
 add  supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
